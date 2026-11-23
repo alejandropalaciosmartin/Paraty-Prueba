@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reserva confirmada · Hotel Playa Demo</title>
+  <link rel="stylesheet" href="estilos.css">
+  <script src="config.js"></script>
+  <script src="comun.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Reserva confirmada</h1>
+    <p>Motor de reservas · Hotel Playa Demo</p>
+  </header>
+  <main>
+    <section class="tarjeta">
+      <h2>Gracias por tu reserva</h2>
+      <dl>
+        <dt>Localizador</dt><dd id="localizador"></dd>
+        <dt>Habitación</dt><dd>Doble Superior · Alojamiento y desayuno</dd>
+        <dt>Estancia</dt><dd>2027/03/10 – 2027/03/14 · 4 noches · 2 adultos</dd>
+        <dt>Total pagado</dt><dd>12.850,00 MXN</dd>
+        <dt>Pago</dt><dd>Tarjeta (Redsys)</dd>
+      </dl>
+    </section>
+
+    <section class="tarjeta nota">
+      <h2>Para la prueba</h2>
+      <p>Al cargar, esta página emite <code>purchase</code> y, justo después, <code>booking_finished</code>.
+        Recargarla repite la misma reserva, con el mismo localizador.</p>
+      <p>
+        <button class="boton secundario" id="otra" type="button">Simular otra reserva</button>
+        <a class="boton secundario" href="index.html">Volver a la web</a>
+      </p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var p = new URLSearchParams(location.search);
+      var localizador = (p.get('loc') || 'TST7Q2M9KD').toUpperCase();
+      document.getElementById('localizador').textContent = localizador;
+      document.getElementById('otra').addEventListener('click', function () {
+        var nuevo = 'TST' + Math.random().toString(36).slice(2, 9).toUpperCase();
+        location.href = location.pathname + '?loc=' + nuevo;
+      });
+
+      // Estructura del dataLayer del motor de reservas, con datos inventados.
+      var estancia = {
+        namespace: 'demo-hotel-playa',
+        hotelId: '900001',
+        hotel_name: 'Hotel Playa Demo',
+        language_code: 'es',
+        numAdults: 2,
+        numChildren: 0,
+        numRooms: 1,
+        nights: 4,
+        checkin: '2027-03-10',
+        checkout: '2027-03-14',
+        coupon: '',
+        email: 'Huesped.Prueba@Example.com ',
+        phone_number: '+34 600 11 22 33'
+      };
+
+      function evento(nombre, moneda, extra) {
+        var push = { event: nombre };
+        var k;
+        for (k in estancia) push[k] = estancia[k];
+        for (k in extra) push[k] = extra[k];
+        push.ecommerce = {
+          transaction_id: localizador,
+          value: 12850.00,
+          currency: moneda,
+          affiliation: 'Hotel Playa Demo',
+          pasarela: 'redsys',
+          items: [{
+            item_id: 'DBL-SUP',
+            item_name: 'Doble Superior',
+            item_brand: 'Hotel Playa Demo',
+            item_category: 'Habitación',
+            item_list_id: 'booking1',
+            item_variant: 'Alojamiento y desayuno',
+            price: 3212.50,
+            quantity: 4,
+            currency: moneda
+          }]
+        };
+        return push;
+      }
+
+      window.dataLayer.push({ ecommerce: null });
+      window.dataLayer.push(evento('purchase', 'USD', {
+        currencyCode: 'USD',
+        selected_currency: 'MXN',
+        transactionTotalUSD: 690.44
+      }));
+      window.dataLayer.push(evento('booking_finished', 'MXN', {}));
+    })();
+  </script>
+</body>
+</html>

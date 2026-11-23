@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hotel Playa Demo</title>
+  <link rel="stylesheet" href="estilos.css">
+  <script src="config.js"></script>
+  <script src="comun.js"></script>
+  <script>
+    // Contexto del hotel, como lo emite la web.
+    window.dataLayer.push({
+      namespace: 'demo-hotel-playa',
+      hotelId: '900001',
+      hotel_name: 'Hotel Playa Demo',
+      language_code: 'es'
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <h1>Hotel Playa Demo</h1>
+    <p>Web del hotel · simulación para la prueba técnica</p>
+  </header>
+  <main>
+    <section class="tarjeta">
+      <h2>Doble Superior · 4 noches</h2>
+      <dl>
+        <dt>Entrada</dt><dd>2027/03/10</dd>
+        <dt>Salida</dt><dd>2027/03/14</dd>
+        <dt>Huéspedes</dt><dd>2 adultos</dd>
+        <dt>Régimen</dt><dd>Alojamiento y desayuno</dd>
+        <dt>Total</dt><dd>12.850,00 MXN</dd>
+      </dl>
+      <p><a class="boton" href="reserva-confirmada.html">Reservar</a></p>
+    </section>
+
+    <section class="tarjeta nota">
+      <h2>Cómo usar esta página</h2>
+      <ol>
+        <li>Entra con un clic de campaña simulado:
+          <code>index.html?gclid=PRUEBA-GCLID-001&amp;fbclid=PRUEBA-FBCLID-001</code></li>
+        <li>Elige en el banner. «Consentimiento: … · cambiar», abajo a la derecha, lo vuelve a sacar.</li>
+        <li>Pulsa «Reservar». La confirmación emite la reserva en el dataLayer.</li>
+      </ol>
+    </section>
+  </main>
+</body>
+</html>
